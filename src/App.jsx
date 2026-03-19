@@ -5,12 +5,18 @@ function App() {
   const [score, setScore] = useState(0);
   const [max, setMax] = useState(0);
   const [box, setBox] = useState([]);
+  const [pack, setPack] = useState([]);
+  const [finish, setFinish] = useState(false);
 
   function rgbN() {
     return Math.floor(Math.random() * 256);
   }
 
-  function fillingBox() {
+  function mixBox(arr) {
+    setBox([...arr].sort((a, b) => Math.random() - 0.5));
+  }
+
+  function fillBox() {
     const helper = [];
     for (let i = 0; i < 12; i++) {
       helper.push({
@@ -19,34 +25,55 @@ function App() {
         color: `rgb(${rgbN()}, ${rgbN()}, ${rgbN()})`,
       });
     }
-    setBox(helper);
+    mixBox(helper);
   }
 
   useEffect(() => {
-    fillingBox();
+    fillBox();
   }, []);
+
+  function handleClick(ident) {
+    if (finish) return;
+    if (pack.includes(ident)) {
+      setFinish(true);
+      return;
+    }
+    if (max == 11) {
+      setFinish(true);
+      setScore(score + 1);
+      setMax(score + 1);
+      return;
+    }
+    setPack([...pack, ident]);
+    mixBox(box);
+    setScore(score + 1);
+    if (score + 1 > max) setMax(score + 1);
+  }
+
+  function handleGame() {
+    setScore(0);
+    setPack([]);
+    setFinish(false);
+    mixBox(box);
+    if (max == 12) setMax(0);
+  }
 
   function Card({ cell }) {
     return (
-      <div
-        id={cell["id"]}
-        klassName="cellGame"
-        style={{
-          background: `${cell["color"]} center top / contain no-repeat url(${cell["id"]})`,
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "end",
-          justifyContent: "center",
-        }}
-      >
+      <>
+        <img
+          src={cell["id"]}
+          alt={cell["name"]}
+          className="cellGame"
+          style={{ width: "100%" }}
+        />
         <span
           className="cardName"
           style={{
             fontSize: "1.25em",
             fontWeight: "bold",
             color: "field",
-            padding: "0.5rem 0",
+            padding: "0.125em 0",
             backgroundColor: "rgb(0 0 0 / 0.5)",
             textTransform: "capitalize",
             width: "100%",
@@ -54,28 +81,32 @@ function App() {
         >
           {cell["name"]}
         </span>
-      </div>
+      </>
     );
   }
 
-  function FieldGame({ line }) {
-    return line.map((item) => (
-      <div
+  function FieldGame() {
+    return box.map((item) => (
+      <button
         key={item["name"]}
         id={item["name"]}
-        tabIndex="0"
         className="fieldGame"
+        onClick={() => handleClick(item["name"])}
         style={{
-          width: "200px",
-          height: "230px",
-          cursor: "pointer",
+          background: `${item["color"]} center top / contain no-repeat url(${item["id"]})`,
+          width: "11em",
+          height: "12.25em",
+          padding: "0",
+          color: "var(--text)",
           border: "thick solid lightgray",
-          borderRadius: "15px",
           overflow: "hidden",
+          display: "flex",
+          justifyContent: "flex-end",
+          flexDirection: "column",
         }}
       >
         <Card cell={item} />
-      </div>
+      </button>
     ));
   }
 
@@ -119,8 +150,24 @@ function App() {
             </p>
           </div>
         </header>
-        <section id="spacer">
-          <p>Play game</p>
+        <section
+          id="spacer"
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
+        >
+          <h3 style={{width:"15ch"}}>
+            {finish && max == 12
+              ? "Fantastic!"
+              : finish
+                ? "Fiasco"
+                : "Play game"}
+          </h3>
+          <button name="next" disabled={!finish} onClick={handleGame}>
+            {max < 12 ? "Next attempt" : "New Game"}
+          </button>
         </section>
         <section
           style={{
@@ -132,7 +179,7 @@ function App() {
             margin: "0 auto",
           }}
         >
-          <FieldGame line={box} />
+          <FieldGame />
         </section>
       </main>
 
