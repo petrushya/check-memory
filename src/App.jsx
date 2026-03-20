@@ -8,24 +8,44 @@ function App() {
   const [pack, setPack] = useState([]);
   const [finish, setFinish] = useState(false);
 
-  function rgbN() {
-    return Math.floor(Math.random() * 256);
+  function color() {
+    const n = () => Math.floor(Math.random() * 256);
+    return `rgb(${n()}, ${n()}, ${n()})`;
   }
 
   function mixBox(arr) {
     setBox([...arr].sort((a, b) => Math.random() - 0.5));
   }
 
-  function fillBox() {
-    const helper = [];
-    for (let i = 0; i < 12; i++) {
-      helper.push({
-        id: `img${i}`,
-        name: `card${i + 1}`,
-        color: `rgb(${rgbN()}, ${rgbN()}, ${rgbN()})`,
-      });
+  async function fillBox() {
+    try {
+      const responce = await fetch(
+        "https://pokeapi.co/api/v2/pokemon?offset=162&limit=12",
+      );
+      const record = await responce.json();
+      const helper = await Promise.all(
+        record.results.map(async (item) => {
+          const reply = await fetch(item.url);
+          const details = await reply.json();
+          return {
+            id: details.sprites.front_default,
+            name: details.name,
+            color: color(),
+          };
+        }),
+      );
+      mixBox(helper);
+    } catch (error) {
+      const helper = [];
+      for (let i = 0; i < 12; i++) {
+        helper.push({
+          id: `img${i}`,
+          name: `card${i + 1}`,
+          color: color(),
+        });
+      }
+      mixBox(helper);
     }
-    mixBox(helper);
   }
 
   useEffect(() => {
@@ -89,7 +109,7 @@ function App() {
     return box.map((item) => (
       <button
         key={item["name"]}
-        id={item["name"]}
+        name={item["name"]}
         className="fieldGame"
         onClick={() => handleClick(item["name"])}
         style={{
@@ -158,7 +178,7 @@ function App() {
             alignItems: "center",
           }}
         >
-          <h3 style={{width:"15ch"}}>
+          <h3 style={{ width: "15ch" }}>
             {finish && max == 12
               ? "Fantastic!"
               : finish
