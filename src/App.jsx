@@ -24,12 +24,14 @@ function App() {
       );
       const record = await responce.json();
       const helper = await Promise.all(
-        record.results.map(async (item) => {
-          const reply = await fetch(item.url);
-          const details = await reply.json();
+        record.results.map((item, index) => {
           return {
-            id: details.sprites.front_default,
-            name: details.name,
+            id:
+              "https://raw.githubusercontent.com/PokeAPI/sprites/master/" +
+              "sprites/pokemon/other/home/" +
+              (index + 163) +
+              ".png",
+            name: item.name,
             color: color(),
           };
         }),
@@ -93,7 +95,7 @@ function App() {
             fontSize: "1.25em",
             fontWeight: "bold",
             color: "field",
-            padding: "0.125em 0",
+            padding: "0.25em 0",
             backgroundColor: "rgb(0 0 0 / 0.5)",
             textTransform: "capitalize",
             width: "100%",
@@ -115,7 +117,7 @@ function App() {
         style={{
           background: `${item["color"]} center top / contain no-repeat url(${item["id"]})`,
           width: "11em",
-          height: "12.25em",
+          height: "13em",
           padding: "0",
           color: "var(--text)",
           border: "thick solid lightgray",
