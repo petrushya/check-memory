@@ -17,31 +17,32 @@ function App() {
     setBox([...arr].sort((a, b) => Math.random() - 0.5));
   }
 
-  async function fillBox() {
+  const fillBox = async function() {
     try {
       const responce = await fetch(
         "https://pokeapi.co/api/v2/pokemon?offset=162&limit=12",
       );
       const record = await responce.json();
-      const helper = await Promise.all(
-        record.results.map((item, index) => {
-          return {
-            id:
+      record.results.map((item, index) => {
+        setBox([
+          ...box,
+          {
+            img:
               "https://raw.githubusercontent.com/PokeAPI/sprites/master/" +
               "sprites/pokemon/other/home/" +
               (index + 163) +
               ".png",
             name: item.name,
             color: color(),
-          };
-        }),
-      );
-      mixBox(helper);
+          },
+        ]);
+      });
+      mixBox(box);
     } catch (error) {
       const helper = [];
       for (let i = 0; i < 12; i++) {
         helper.push({
-          id: `img${i}`,
+          img: null,
           name: `card${i + 1}`,
           color: color(),
         });
@@ -80,56 +81,56 @@ function App() {
     if (max == 12) setMax(0);
   }
 
-  function Card({ cell }) {
-    return (
-      <>
-        <img
-          src={cell["id"]}
-          alt={cell["name"]}
-          className="cellGame"
-          style={{ width: "100%" }}
-        />
-        <span
-          className="cardName"
-          style={{
-            fontSize: "1.25em",
-            fontWeight: "bold",
-            color: "field",
-            padding: "0.25em 0",
-            backgroundColor: "rgb(0 0 0 / 0.5)",
-            textTransform: "capitalize",
-            width: "100%",
-          }}
-        >
-          {cell["name"]}
-        </span>
-      </>
-    );
-  }
-
   function FieldGame() {
-    return box.map((item) => (
-      <button
-        key={item["name"]}
-        name={item["name"]}
-        className="fieldGame"
-        onClick={() => handleClick(item["name"])}
+    return (
+      <section
         style={{
-          background: `${item["color"]} center top / contain no-repeat url(${item["id"]})`,
-          width: "11em",
-          height: "13em",
-          padding: "0",
-          color: "var(--text)",
-          border: "thick solid lightgray",
-          overflow: "hidden",
           display: "flex",
-          justifyContent: "flex-end",
-          flexDirection: "column",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "1ch",
+          maxWidth: "85%",
+          margin: "0 auto",
+          paddingBlockEnd: "2em",
         }}
       >
-        <Card cell={item} />
-      </button>
-    ));
+        {box.map((cell) => (
+          <button
+            key={cell["name"]}
+            name={cell["name"]}
+            className="fieldGame"
+            onClick={() => handleClick(cell["name"])}
+            style={{
+              background: `${cell["color"]} center top / contain no-repeat url(${cell["img"]})`,
+              width: "11em",
+              height: "13em",
+              padding: "0",
+              color: "var(--text)",
+              border: "thick solid lightgray",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "flex-end",
+              flexDirection: "column",
+            }}
+          >
+            <span
+              className="cardName"
+              style={{
+                fontSize: "1.25em",
+                fontWeight: "bold",
+                color: "field",
+                padding: "0.25em 0",
+                backgroundColor: "rgb(0 0 0 / 0.5)",
+                textTransform: "capitalize",
+                width: "100%",
+              }}
+            >
+              {cell["name"]}
+            </span>
+          </button>
+        ))}
+      </section>
+    );
   }
 
   return (
@@ -191,18 +192,7 @@ function App() {
             {max < 12 ? "Next attempt" : "New Game"}
           </button>
         </section>
-        <section
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "1ch",
-            maxWidth: "85%",
-            margin: "0 auto",
-          }}
-        >
-          <FieldGame />
-        </section>
+        <FieldGame />
       </main>
 
       <div className="ticks"></div>
