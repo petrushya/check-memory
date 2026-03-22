@@ -17,42 +17,21 @@ function App() {
     setBox([...arr].sort((a, b) => Math.random() - 0.5));
   }
 
-  const fillBox = async function() {
-    try {
-      const responce = await fetch(
-        "https://pokeapi.co/api/v2/pokemon?offset=162&limit=12",
-      );
-      const record = await responce.json();
-      record.results.map((item, index) => {
-        setBox([
-          ...box,
-          {
-            img:
-              "https://raw.githubusercontent.com/PokeAPI/sprites/master/" +
-              "sprites/pokemon/other/home/" +
-              (index + 163) +
-              ".png",
-            name: item.name,
-            color: color(),
-          },
-        ]);
-      });
-      mixBox(box);
-    } catch (error) {
-      const helper = [];
-      for (let i = 0; i < 12; i++) {
-        helper.push({
-          img: null,
-          name: `card${i + 1}`,
-          color: color(),
-        });
-      }
-      mixBox(helper);
-    }
-  }
+  const getData = async () => {
+    const responce = await fetch("/pics/pictures.json");
+    const record = await responce.json();
+    const filler = record.map((item) => {
+      return {
+        img: Object.values(item)[0],
+        name: Object.keys(item)[0],
+        color: color(),
+      };
+    });
+    mixBox(filler);
+  };
 
   useEffect(() => {
-    fillBox();
+    getData();
   }, []);
 
   function handleClick(ident) {
@@ -96,16 +75,15 @@ function App() {
       >
         {box.map((cell) => (
           <button
-            key={cell["name"]}
-            name={cell["name"]}
+            key={cell.name}
+            name={cell.name}
             className="fieldGame"
-            onClick={() => handleClick(cell["name"])}
+            onClick={() => handleClick(cell.name)}
             style={{
-              background: `${cell["color"]} center top / contain no-repeat url(${cell["img"]})`,
+              background: `${cell.color} center top / contain no-repeat url(${cell.img})`,
               width: "11em",
-              height: "13em",
+              height: "13.25em",
               padding: "0",
-              color: "var(--text)",
               border: "thick solid lightgray",
               overflow: "hidden",
               display: "flex",
@@ -119,13 +97,13 @@ function App() {
                 fontSize: "1.25em",
                 fontWeight: "bold",
                 color: "field",
-                padding: "0.25em 0",
-                backgroundColor: "rgb(0 0 0 / 0.5)",
+                padding: "0.125em 0",
+                backgroundColor: "rgba(0 0 0 / 0.5)",
                 textTransform: "capitalize",
                 width: "100%",
               }}
             >
-              {cell["name"]}
+              {cell.name}
             </span>
           </button>
         ))}
