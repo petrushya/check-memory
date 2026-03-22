@@ -18,7 +18,7 @@ function App() {
   }
 
   const getData = async () => {
-    const responce = await fetch("/pics/pictures.json");
+    const responce = await fetch("/check-memory/pics/pictures.json");
     const record = await responce.json();
     const filler = record.map((item) => {
       return {
