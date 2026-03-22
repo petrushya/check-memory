@@ -1,23 +1,79 @@
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
+#spacer {
+  height: 4rem;
+  border-block-start: thick solid selecteditem;
   @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
+    height: 3rem;
   }
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
+.flx {
+  display: flex;
+  gap: 0.75ch;
+}
+
+.dir-c {
+  flex-direction: column;
+} 
+
+.f-wr {
+  flex-wrap: wrap;
+}
+
+.aln-e {
+  align-items: end;
+}
+
+.aln-c {
+  align-items: center;
+}
+
+.j-cn {
+  justify-content: center;
+}
+
+.j-e {
+  justify-content: flex-end;
+}
+
+.j-b {
+  justify-content: space-between;
+}
+
+.j-a {
+  justify-content: space-around;
+}
+
+.txt-l {
+  text-align: left;
+}
+
+.txt-r {
+  text-align: right;
+}
+
+header {
+  padding: 0.5rem 0.5ch;
+  margin-block-start: 1rem;
+}
+
+.count {
+  flex: 0 0 17ch;
+}
+
+.score {
+  flex-basis: 5ch;
+}
+
+.max-p {
+  align-items: end;
+}
+
+.max {
+  flex: 0 0 5ch;
+}
+
+.info {
+  width: 15ch;
 }
 
 button {
@@ -26,29 +82,39 @@ button {
   font-weight: bold;
   font-variant: all-small-caps;
   border: unset;
-  background-color: var(--border);
+  background-color: buttonface;
   border-radius: 0.75em;
   cursor: pointer;
+  &:hover {
+    outline: thin solid highlight;
+  }
+}
+
+.field {
+  margin: 0 auto;
+  padding: 1em 2em;
+  margin-block-start: 0.5em;
+}
+
+.gameButton {
+  width: 10em;
+  height: 11.75em;
+  padding: 0;
+  border: thick solid var(--lightest-gray);
+  overflow: hidden;
+}
+
+.buttonName {
+  width: 100%;
+  font-size: 1.25em;
+  font-weight: bold;
+  color: white;
+  padding: 0.125em 0;
+  background-color: rgba(0 0 0 / 0.5);
+  text-transform: capitalize;
 }
 
 .ticks {
   position: relative;
   width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
 }

@@ -10,7 +10,7 @@ function App() {
 
   function color() {
     const n = () => Math.floor(Math.random() * 256);
-    return `rgb(${n()}, ${n()}, ${n()})`;
+    return `rgb(${n()} ${n()} ${n()})`;
   }
 
   function mixBox(arr) {
@@ -62,49 +62,18 @@ function App() {
 
   function FieldGame() {
     return (
-      <section
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "1ch",
-          maxWidth: "85%",
-          margin: "0 auto",
-          paddingBlockEnd: "2em",
-        }}
-      >
+      <section className="field flx f-wr j-cn">
         {box.map((cell) => (
           <button
             key={cell.name}
             name={cell.name}
-            className="fieldGame"
+            className="gameButton flx dir-c j-e"
             onClick={() => handleClick(cell.name)}
             style={{
               background: `${cell.color} center top / contain no-repeat url(${cell.img})`,
-              width: "11em",
-              height: "13.25em",
-              padding: "0",
-              border: "thick solid lightgray",
-              overflow: "hidden",
-              display: "flex",
-              justifyContent: "flex-end",
-              flexDirection: "column",
             }}
           >
-            <span
-              className="cardName"
-              style={{
-                fontSize: "1.25em",
-                fontWeight: "bold",
-                color: "field",
-                padding: "0.125em 0",
-                backgroundColor: "rgba(0 0 0 / 0.5)",
-                textTransform: "capitalize",
-                width: "100%",
-              }}
-            >
-              {cell.name}
-            </span>
+            <span className="buttonName">{cell.name}</span>
           </button>
         ))}
       </section>
@@ -114,58 +83,25 @@ function App() {
   return (
     <>
       <main>
-        <header
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            placeItems: "end",
-            padding: "0.5rem 0.5ch",
-            marginBlockStart: "1rem",
-            gap: "0.75ch",
-          }}
-        >
-          <h1>Memory card game</h1>
-          <div style={{ flex: "1 0 17ch" }}>
-            <p
-              style={{
-                display: "flex",
-                columnGap: "0.75ch",
-                justifyContent: "flex-end",
-              }}
-            >
-              <span>Score:</span>
-              <span style={{ flexBasis: "5ch", textAlign: "start" }}>
-                {score}
-              </span>
-            </p>
-            <p
-              style={{
-                display: "flex",
-                columnGap: "0.75ch",
-                justifyContent: "flex-end",
-                alignItems: "end",
-              }}
-            >
-              <span style={{ textAlign: "right" }}>Max score:</span>
-              <span style={{ flex: "0 0 5ch", textAlign: "start" }}>{max}</span>
-            </p>
-          </div>
-        </header>
-        <section
-          id="spacer"
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-        >
-          <h3 style={{ width: "15ch" }}>
+      <h1>Memory card game</h1>
+        <section id="spacer" className="flx j-a aln-e">
+          <h3 className="info">
             {finish && max == 12
               ? "Fantastic!"
               : finish
                 ? "Fiasco"
-                : "Play game"}
+                : "You can play"}
           </h3>
+          <div className="count">
+            <p className="flx j-e">
+              <span>Score:</span>
+              <span className="score txt-l">{score}</span>
+            </p>
+            <p className="max-p flx j-e">
+              <span className="txt-r">Max score:</span>
+              <span className="max txt-l">{max}</span>
+            </p>
+          </div>
           <button name="next" disabled={!finish} onClick={handleGame}>
             {max < 12 ? "Next attempt" : "New Game"}
           </button>
