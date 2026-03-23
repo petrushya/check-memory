@@ -40,7 +40,7 @@ function App() {
       setFinish(true);
       return;
     }
-    if (max == 11) {
+    if (score + 1 == 12) {
       setFinish(true);
       setScore(score + 1);
       setMax(score + 1);
@@ -84,8 +84,9 @@ function App() {
     <>
       <main>
       <h1>Memory card game</h1>
-        <section id="spacer" className="flx j-a aln-e">
-          <h3 className="info">
+      <p>One image &ndash; one click</p>
+        <section id="spacer" className="flx j-a aln-c">
+          <h3 className="info txt-l">
             {finish && max == 12
               ? "Fantastic!"
               : finish
@@ -98,7 +99,9 @@ function App() {
               <span className="score txt-l">{score}</span>
             </p>
             <p className="max-p flx j-e">
-              <span className="txt-r">Max score:</span>
+              <span className="txt-r">
+                {max < 12 ? "Best score" : "Maximum"}:
+              </span>
               <span className="max txt-l">{max}</span>
             </p>
           </div>

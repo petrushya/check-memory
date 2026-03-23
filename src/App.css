@@ -57,7 +57,7 @@ header {
 }
 
 .count {
-  flex: 0 0 17ch;
+  flex: 0 0 15.5ch;
 }
 
 .score {
@@ -73,11 +73,12 @@ header {
 }
 
 .info {
-  width: 15ch;
+  width: 14ch;
 }
 
 button {
-  padding: 0.5em;
+  width: 15ch;
+  padding: 0.5em 0;
   font-size: 1em;
   font-weight: bold;
   font-variant: all-small-caps;
