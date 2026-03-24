@@ -51,11 +51,6 @@
   text-align: right;
 }
 
-header {
-  padding: 0.5rem 0.5ch;
-  margin-block-start: 1rem;
-}
-
 .count {
   flex: 0 0 15.5ch;
 }

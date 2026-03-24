@@ -29,7 +29,6 @@ body {
 #root {
   width: 860px;
   background-color: var(--bg);
-  max-width: 100%;
   margin: 0 auto;
   text-align: center;
   min-height: 100svh;
