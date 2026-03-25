@@ -17,17 +17,35 @@ function App() {
     setBox([...arr].sort((a, b) => Math.random() - 0.5));
   }
 
+  const list = [
+    "apple",
+    "bouquet",
+    "butterfly",
+    "chipmunk",
+    "dove",
+    "dragon",
+    "ice_cream",
+    "lotus",
+    "mango",
+    "panda_face",
+    "peacock",
+    "turkey",
+  ];
   const getData = async () => {
-    const responce = await fetch("/check-memory/pics/pictures.json");
-    const record = await responce.json();
-    const filler = record.map((item) => {
-      return {
-        img: Object.values(item)[0],
-        name: Object.keys(item)[0],
-        color: color(),
-      };
-    });
-    mixBox(filler);
+    try {
+      const responce = await fetch("https://api.github.com/emojis");
+      const result = await responce.json();
+      const filler = list.map((term) => {
+        return {
+          img: result[term],
+          name: term,
+          color: color(),
+        };
+      });
+      mixBox(filler);
+    } catch (error) {
+      setBox([error.message]);
+    }
   };
 
   useEffect(() => {
@@ -63,19 +81,23 @@ function App() {
   function FieldGame() {
     return (
       <section className="field flx f-wr j-cn">
-        {box.map((cell) => (
-          <button
-            key={cell.name}
-            name={cell.name}
-            className="gameButton flx dir-c j-e"
-            onClick={() => handleClick(cell.name)}
-            style={{
-              background: `${cell.color} center top / contain no-repeat url(${cell.img})`,
-            }}
-          >
-            <span className="buttonName">{cell.name}</span>
-          </button>
-        ))}
+        {box.length < 12 ? (
+          <p>{!box.length ? "Download..." : box[0]}</p>
+        ) : (
+          box.map((cell) => (
+            <button
+              key={cell.name}
+              name={cell.name}
+              className="gameButton flx dir-c j-e"
+              onClick={() => handleClick(cell.name)}
+              style={{
+                background: `${cell.color} center top / contain no-repeat url(${cell.img})`,
+              }}
+            >
+              <span className="buttonName">{cell.name}</span>
+            </button>
+          ))
+        )}
       </section>
     );
   }
@@ -83,8 +105,8 @@ function App() {
   return (
     <>
       <main>
-      <h1>Memory card game</h1>
-      <p>One image &ndash; one click</p>
+        <h1>Memory card game</h1>
+        <p>One image &ndash; one click</p>
         <section id="spacer" className="flx j-a aln-c">
           <h3 className="info txt-l">
             {finish && max == 12
